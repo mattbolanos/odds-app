@@ -11,6 +11,8 @@
 -- CONSTRAINT PK_dke PRIMARY KEY (eventId)
 -- );
 
+-- DraftKings NBA team odds
+
 -- CREATE TABLE "dk_nba_team_odds"(
 -- eventId INT NOT NULL,
 -- teamType VARCHAR(4) NOT NULL,
@@ -21,4 +23,69 @@
 -- CONSTRAINT PK_dknto PRIMARY KEY (eventId, teamType)
 -- );
 
+-- NBA API games table
+
+-- CREATE TABLE "nba_api_events"(
+-- gameId VARCHAR(25) NOT NULL,
+-- gameEt timestamp with time zone NOT NULL,
+-- awayTeamId INT NOT NULL,
+-- awayTeamSlug VARCHAR(3) NOT NULL,
+-- awayTeamName VARCHAR(30) NOT NULL,
+-- homeTeamId INT NOT NULL,
+-- homeTeamSlug VARCHAR(3) NOT NULL,
+-- homeTeamName VARCHAR(30) NOT NULL,
+-- CONSTRAINT PK_nbaapi PRIMARY KEY (gameId)
+-- );
+
+-- Create stored procedure in postgresql to insert dk_events if not exists, update otherwise
+
+-- CREATE PROCEDURE update_dkevents(
+--     event_id INT,
+--     startDate timestamp with time zone,
+--     awayTeamSlug VARCHAR(3),
+--     homeTeamSlug VARCHAR(3),
+--     awayTeamName VARCHAR(30),
+--     homeTeamName VARCHAR(30),
+--     leagueSlug VARCHAR(10)
+-- )
+-- LANGUAGE plpgsql
+-- AS $$
+
+-- BEGIN
+--     INSERT INTO dk_events (eventId, startDate, awayTeamSlug, homeTeamSlug, awayTeamName, homeTeamName, leagueSlug)
+--     VALUES (event_id, startDate, awayTeamSlug, homeTeamSlug, awayTeamName, homeTeamName, leagueSlug)
+--     ON CONFLICT (eventId) DO UPDATE
+--     SET startDate = EXCLUDED.startDate,
+--         awayTeamSlug = EXCLUDED.awayTeamSlug,
+--         homeTeamSlug = EXCLUDED.homeTeamSlug,
+--         awayTeamName = EXCLUDED.awayTeamName,
+--         homeTeamName = EXCLUDED.homeTeamName,
+--         leagueSlug = EXCLUDED.leagueSlug;
+-- END;
+-- $$;
+
+-- Create stored procedure in postgresql to insert dk_nba_team_odds if not exists, update otherwise
+
+-- CREATE PROCEDURE update_dkodds_nba_team(
+--     event_id INT,
+--     team_type VARCHAR(4),
+--     oddsMoneyline INT,
+--     oddsSpread FLOAT,
+--     spreadLine FLOAT,
+--     totalPointsLine FLOAT
+-- )
+-- LANGUAGE plpgsql
+-- AS $$
+
+-- BEGIN
+--     INSERT INTO dk_nba_team_odds (eventId, teamType, oddsMoneyline, oddsSpread, spreadLine, totalPointsLine)
+--     VALUES (event_id, team_type, oddsMoneyline, oddsSpread, spreadLine, totalPointsLine)
+--     ON CONFLICT (eventId, teamType) DO UPDATE
+--     -- Update if value is not null
+--     SET oddsMoneyline = CASE WHEN EXCLUDED.oddsMoneyline IS NOT NULL THEN EXCLUDED.oddsMoneyline ELSE dk_nba_team_odds.oddsMoneyline END,
+--         oddsSpread = CASE WHEN EXCLUDED.oddsSpread IS NOT NULL THEN EXCLUDED.oddsSpread ELSE dk_nba_team_odds.oddsSpread END,
+--         spreadLine = CASE WHEN EXCLUDED.spreadLine IS NOT NULL THEN EXCLUDED.spreadLine ELSE dk_nba_team_odds.spreadLine END,
+--         totalPointsLine = CASE WHEN EXCLUDED.totalPointsLine IS NOT NULL THEN EXCLUDED.totalPointsLine ELSE dk_nba_team_odds.totalPointsLine END;
+-- END;
+-- $$;
 
