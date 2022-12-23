@@ -1,14 +1,24 @@
 -- DraftKings events table
 
-CREATE TABLE dk_events(
-eventId INT NOT NULL,
-startDate datetime2 NOT NULL,
-awayTeamSlug VARCHAR(3) NOT NULL,
-homeTeamSlug VARCHAR(3) NOT NULL,
-awayTeamName VARCHAR(30) NOT NULL,
-homeTeamName VARCHAR(30) NOT NULL,
-leagueSlug VARCHAR(10) NOT NULL,
-CONSTRAINT PK_dke PRIMARY KEY (eventId)
-)
-GO
+-- CREATE TABLE "dk_events"(
+-- eventId INT NOT NULL,
+-- startDate timestamp with time zone NOT NULL,
+-- awayTeamSlug VARCHAR(3) NOT NULL,
+-- homeTeamSlug VARCHAR(3) NOT NULL,
+-- awayTeamName VARCHAR(30) NOT NULL,
+-- homeTeamName VARCHAR(30) NOT NULL,
+-- leagueSlug VARCHAR(10) NOT NULL,
+-- CONSTRAINT PK_dke PRIMARY KEY (eventId)
+-- );
+
+-- CREATE TABLE "dk_nba_team_odds"(
+-- eventId INT NOT NULL,
+-- teamType VARCHAR(4) NOT NULL,
+-- oddsMoneyline INT NOT NULL, 
+-- oddsSpread FLOAT NOT NULL,
+-- spreadLine FLOAT NOT NULL,
+-- totalPointsLine FLOAT NOT NULL,
+-- CONSTRAINT PK_dknto PRIMARY KEY (eventId, teamType)
+-- );
+
 
