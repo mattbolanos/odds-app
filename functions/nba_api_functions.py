@@ -275,7 +275,7 @@ def get_nba_api_team_game_logs(nba_header_data: dict, date_from: str = None, dat
         nba_api_team_game_logs_headers_base = resp['resultSets'][0]['headers']
 
         # set columns to select for base game logs
-        nba_api_team_game_logs_columns_base = ['GAME_ID', 'TEAM_ID', 'WL', 'PTS', 'FGM',
+        nba_api_team_game_logs_columns_base = ['GAME_ID', 'TEAM_ID', 'WL', 'MIN' ,'PTS', 'FGM',
                                                'FGA', 'FG3M', 'FG3A', 'FTM', 'FTA', 'OREB', 'DREB',
                                                'REB', 'AST', 'TOV', 'STL', 'BLK', 'BLKA', 'PF', 'PFD']
         # Turn rowSet into dataframe, set column names
@@ -290,6 +290,9 @@ def get_nba_api_team_game_logs(nba_header_data: dict, date_from: str = None, dat
         nba_api_team_game_logs.columns = [convert_camel_case(
             x) for x in nba_api_team_game_logs.columns]
 
+        # Convert min to int
+        nba_api_team_game_logs['min'] = nba_api_team_game_logs['min'].astype(int)
+        
         return nba_api_team_game_logs
 
     except:
@@ -325,16 +328,16 @@ def update_nba_api_data(cursor, nba_games_today, nba_api_team_game_logs, nba_api
             for index, row in nba_api_team_game_logs.iterrows():
                 # Query
                 query = """
-                CALL update_nbaapi_team_game_logs(%s, %s, %s, %s, %s, %s,
-                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                """
+                            CALL update_nbaapi_team_game_logs(%s, %s, %s, %s, %s, %s,
+                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                            """
                 # Execute
-                cursor.execute(query, (row['gameId'], row['teamId'], row['wl'], 
-                                       row['pts'], row['fgm'], row['fga'], row['fg3M'], 
-                                       row['fg3A'], row['ftm'], row['fta'], row['oreb'], 
-                                       row['dreb'], row['reb'], row['ast'], row['tov'], 
-                                       row['stl'], row['blk'], row['blka'], row['pf'], 
-                                       row['pfd'], row['poss']))
+                cursor.execute(query, (row['gameId'], row['teamId'], row['wl'],
+                                    row['pts'], row['fgm'], row['fga'], row['fg3M'],
+                                    row['fg3A'], row['ftm'], row['fta'], row['oreb'],
+                                    row['dreb'], row['reb'], row['ast'], row['tov'],
+                                    row['stl'], row['blk'], row['blka'], row['pf'],
+                                    row['pfd'], row['poss'], row['min']))
             print('Updated nba_api_team_game_logs')
     except:
         print('Error updating nba_api_team_game_logs')

@@ -142,6 +142,7 @@
 -- pf INT NOT NULL,
 -- pfd INT NOT NULL,
 -- poss INT NOT NULL,
+-- min int NOT NULL,
 -- CONSTRAINT PK_nbaapi_team_game_logs PRIMARY KEY (gameId, teamId)
 -- );
 
@@ -168,16 +169,18 @@
 --     blka INT,
 --     pf INT,
 --     pfd INT,
---     poss INT
+--     poss INT,
+--     min int
 -- )
 -- LANGUAGE plpgsql
 -- AS $$
 
 -- BEGIN
---     INSERT INTO nba_api_team_game_logs (gameId, teamId, wl, pts, fgm, fga, fg3M, fg3A, ftm, fta, oreb, dreb, reb, ast, tov, stl, blk, blka, pf, pfd, poss)
---     VALUES (game_id, team_id, wl, pts, fgm, fga, fg3M, fg3A, ftm, fta, oreb, dreb, reb, ast, tov, stl, blk, blka, pf, pfd, poss)
+--     INSERT INTO nba_api_team_game_logs (gameId, teamId, wl, pts, fgm, fga, fg3M, fg3A, ftm, fta, oreb, dreb, reb, ast, tov, stl, blk, blka, pf, pfd, poss, min)
+--     VALUES (game_id, team_id, wl, pts, fgm, fga, fg3M, fg3A, ftm, fta, oreb, dreb, reb, ast, tov, stl, blk, blka, pf, pfd, poss, min)
 --     ON CONFLICT (gameId, teamId) DO UPDATE
 --     SET wl = EXCLUDED.wl,
+--         min = EXCLUDED.min,
 --         pts = EXCLUDED.pts,
 --         fgm = EXCLUDED.fgm,
 --         fga = EXCLUDED.fga,
