@@ -58,7 +58,7 @@ update_nba_team_odds(cursor, nba_game_df, nba_team_odds_df)
 
 ## NBA API
 # Get today's schedule
-nba_games_today = get_nba_games_today(nba_header_data)
+nba_games_today = get_nba_games(nba_header_data)
 
 # get team game logs
 nba_api_team_game_logs = get_nba_api_team_game_logs(nba_header_data)

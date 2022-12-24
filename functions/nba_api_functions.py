@@ -20,21 +20,19 @@ def convert_camel_case(string: str):
     # Return
     return ''.join([s[0].lower(), s[1:]])
 
-def get_nba_games_today(nba_header_data: dict):
+def get_nba_games(nba_header_data: dict, day = date.today()):
 
-    # Function to scrape NBA API for today's games
+    # Function to scrape NBA API for specified date
     # Args:
     # nba_header_data (dict): headers for NBA API request
+    # day (str): date to get games for, format 'YYYY-MM-DD'
     # Returns
-    # nba_games_today (df): dataframe with today's games
+    # nba_games_today (df): dataframe with games for given date
     ###
-
-    # Get system date
-    today = date.today()
 
     # Paste into url
     nba_schedule_url = 'https://stats.nba.com/stats/scoreboardv3?GameDate=' + \
-        str(today) + '&LeagueID=00'
+        str(day) + '&LeagueID=00'
 
     # Send request
     r = requests.get(nba_schedule_url, headers=nba_header_data)
@@ -83,10 +81,12 @@ def get_nba_games_today(nba_header_data: dict):
         except:
             # Error -> return print statement
             print("Error Returning Today's Games")
+            return pd.DataFrame()
 
     else:
         # No Games Today -> return print statement
         print('No Games Found Today')
+        return pd.DataFrame()
 
 def get_nba_api_player_game_logs(nba_header_data: dict, date_from: str = None, date_to: str = None):
 
