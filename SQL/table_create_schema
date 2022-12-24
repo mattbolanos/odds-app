@@ -89,3 +89,198 @@
 -- END;
 -- $$;
 
+-- Create stored procedure in postgresql to insert nba_api_events if gameId not exists, update otherwise
+
+-- CREATE PROCEDURE update_nbaapi_events(
+--     game_id VARCHAR(25),
+--     game_et timestamp with time zone,
+--     away_team_id INT,
+--     away_team_slug VARCHAR(3),
+--     away_team_name VARCHAR(30),
+--     home_team_id INT,
+--     home_team_slug VARCHAR(3),
+--     home_team_name VARCHAR(30)
+-- )
+-- LANGUAGE plpgsql
+-- AS $$
+
+-- BEGIN
+--     INSERT INTO nba_api_events (gameId, gameEt, awayTeamId, awayTeamSlug, awayTeamName, homeTeamId, homeTeamSlug, homeTeamName)
+--     VALUES (game_id, game_et, away_team_id, away_team_slug, away_team_name, home_team_id, home_team_slug, home_team_name)
+--     ON CONFLICT (gameId) DO UPDATE
+--     SET gameEt = EXCLUDED.gameEt,
+--         awayTeamId = EXCLUDED.awayTeamId,
+--         awayTeamSlug = EXCLUDED.awayTeamSlug,
+--         awayTeamName = EXCLUDED.awayTeamName,
+--         homeTeamId = EXCLUDED.homeTeamId,
+--         homeTeamSlug = EXCLUDED.homeTeamSlug,
+--         homeTeamName = EXCLUDED.homeTeamName;
+-- END;
+-- $$;
+
+-- Create nba_api_team_game_logs table
+
+-- CREATE TABLE "nba_api_team_game_logs"(
+-- gameId VARCHAR(25) NOT NULL,
+-- teamId INT NOT NULL,
+-- wl VARCHAR(1) NOT NULL,
+-- pts INT NOT NULL,
+-- fgm INT NOT NULL,
+-- fga INT NOT NULL,
+-- fg3M INT NOT NULL,
+-- fg3A INT NOT NULL,
+-- ftm INT NOT NULL,
+-- fta INT NOT NULL,
+-- oreb INT NOT NULL,
+-- dreb INT NOT NULL,
+-- reb INT NOT NULL,
+-- ast INT NOT NULL,
+-- tov FLOAT NOT NULL,
+-- stl INT NOT NULL,
+-- blk INT NOT NULL,
+-- blka INT NOT NULL,
+-- pf INT NOT NULL,
+-- pfd INT NOT NULL,
+-- poss INT NOT NULL,
+-- CONSTRAINT PK_nbaapi_team_game_logs PRIMARY KEY (gameId, teamId)
+-- );
+
+-- Create stored procedure in postgresql to insert nba_api_team_game_logs if gameId and teamId not exists, update otherwise
+
+-- CREATE PROCEDURE update_nbaapi_team_game_logs(
+--     game_id VARCHAR(25),
+--     team_id INT,
+--     wl VARCHAR(1),
+--     pts INT,
+--     fgm INT,
+--     fga INT,
+--     fg3M INT,
+--     fg3A INT,
+--     ftm INT,
+--     fta INT,
+--     oreb INT,
+--     dreb INT,
+--     reb INT,
+--     ast INT,
+--     tov FLOAT,
+--     stl INT,
+--     blk INT,
+--     blka INT,
+--     pf INT,
+--     pfd INT,
+--     poss INT
+-- )
+-- LANGUAGE plpgsql
+-- AS $$
+
+-- BEGIN
+--     INSERT INTO nba_api_team_game_logs (gameId, teamId, wl, pts, fgm, fga, fg3M, fg3A, ftm, fta, oreb, dreb, reb, ast, tov, stl, blk, blka, pf, pfd, poss)
+--     VALUES (game_id, team_id, wl, pts, fgm, fga, fg3M, fg3A, ftm, fta, oreb, dreb, reb, ast, tov, stl, blk, blka, pf, pfd, poss)
+--     ON CONFLICT (gameId, teamId) DO UPDATE
+--     SET wl = EXCLUDED.wl,
+--         pts = EXCLUDED.pts,
+--         fgm = EXCLUDED.fgm,
+--         fga = EXCLUDED.fga,
+--         fg3M = EXCLUDED.fg3M,
+--         fg3A = EXCLUDED.fg3A,
+--         ftm = EXCLUDED.ftm,
+--         fta = EXCLUDED.fta,
+--         oreb = EXCLUDED.oreb,
+--         dreb = EXCLUDED.dreb,
+--         reb = EXCLUDED.reb,
+--         ast = EXCLUDED.ast,
+--         tov = EXCLUDED.tov,
+--         stl = EXCLUDED.stl,
+--         blk = EXCLUDED.blk,
+--         blka = EXCLUDED.blka,
+--         pf = EXCLUDED.pf,
+--         pfd = EXCLUDED.pfd,
+--         poss = EXCLUDED.poss;
+-- END;
+-- $$;
+
+-- Create table for nba_api_player_game_logs
+
+-- CREATE TABLE "nba_api_player_game_logs"(
+-- gameId VARCHAR(25) NOT NULL,
+-- playerId INT NOT NULL,
+-- teamId INT NOT NULL,
+-- wl VARCHAR(1) NOT NULL,
+-- min DOUBLE PRECISION NOT NULL,
+-- pts INT NOT NULL,
+-- fgm INT NOT NULL,
+-- fga INT NOT NULL,
+-- fg3M INT NOT NULL,
+-- fg3A INT NOT NULL,
+-- ftm INT NOT NULL,
+-- fta INT NOT NULL,
+-- oreb INT NOT NULL,
+-- dreb INT NOT NULL,
+-- reb INT NOT NULL,
+-- ast INT NOT NULL,
+-- tov INT NOT NULL,
+-- stl INT NOT NULL,
+-- blk INT NOT NULL,
+-- blka INT NOT NULL,
+-- pf INT NOT NULL,
+-- pfd INT NOT NULL,
+-- poss INT NOT NULL,
+-- CONSTRAINT PK_nbaapi_player_game_logs PRIMARY KEY (gameId, playerId)
+-- );
+
+-- Create stored procedure in postgresql to insert nba_api_player_game_logs if gameId and playerId not exists, update otherwise
+
+-- CREATE PROCEDURE update_nbaapi_player_game_logs(
+--     game_id VARCHAR(25),
+--     player_id INT,
+--     team_id INT,
+--     wl VARCHAR(1),
+--     min double PRECISION,
+--     pts INT,
+--     fgm INT,
+--     fga INT,
+--     fg3M INT,
+--     fg3A INT,
+--     ftm INT,
+--     fta INT,
+--     oreb INT,
+--     dreb INT,
+--     reb INT,
+--     ast INT,
+--     tov INT,
+--     stl INT,
+--     blk INT,
+--     blka INT,
+--     pf INT,
+--     pfd INT,
+--     poss INT
+-- )
+-- LANGUAGE plpgsql
+-- AS $$
+
+-- BEGIN
+--     INSERT INTO nba_api_player_game_logs (gameId, playerId, teamId, wl, min, pts, fgm, fga, fg3M, fg3A, ftm, fta, oreb, dreb, reb, ast, tov, stl, blk, blka, pf, pfd, poss)
+--     VALUES (game_id, player_id, team_id, wl, min, pts, fgm, fga, fg3M, fg3A, ftm, fta, oreb, dreb, reb, ast, tov, stl, blk, blka, pf, pfd, poss)
+--     ON CONFLICT (gameId, playerId) DO UPDATE
+--     SET wl = EXCLUDED.wl,
+--         min = EXCLUDED.min,
+--         pts = EXCLUDED.pts,
+--         fgm = EXCLUDED.fgm,
+--         fga = EXCLUDED.fga,
+--         fg3M = EXCLUDED.fg3M,
+--         fg3A = EXCLUDED.fg3A,
+--         ftm = EXCLUDED.ftm,
+--         fta = EXCLUDED.fta,
+--         oreb = EXCLUDED.oreb,
+--         dreb = EXCLUDED.dreb,
+--         reb = EXCLUDED.reb,
+--         ast = EXCLUDED.ast,
+--         tov = EXCLUDED.tov,
+--         stl = EXCLUDED.stl,
+--         blk = EXCLUDED.blk,
+--         blka = EXCLUDED.blka,
+--         pf = EXCLUDED.pf,
+--         pfd = EXCLUDED.pfd,
+--         poss = EXCLUDED.poss;
+-- END;
+-- $$;
