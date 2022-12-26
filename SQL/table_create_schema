@@ -16,7 +16,7 @@
 -- CREATE TABLE "dk_nba_team_odds"(
 -- eventId INT NOT NULL,
 -- teamType VARCHAR(4) NOT NULL,
--- oddsMoneyline INT NOT NULL, 
+-- oddsMoneyline VARCHAR(5) NOT NULL, 
 -- oddsSpread FLOAT NOT NULL,
 -- spreadLine FLOAT NOT NULL,
 -- totalPointsLine FLOAT NOT NULL,
@@ -69,7 +69,7 @@
 -- CREATE PROCEDURE update_dkodds_nba_team(
 --     event_id INT,
 --     team_type VARCHAR(4),
---     oddsMoneyline INT,
+--     oddsMoneyline FLOAT,
 --     oddsSpread FLOAT,
 --     spreadLine FLOAT,
 --     totalPointsLine FLOAT
