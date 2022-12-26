@@ -197,6 +197,9 @@ def update_nba_team_odds(cursor, nba_game_df, nba_team_odds_df):
 
             # Remove American from columns names
             nba_team_odds_df.columns = nba_team_odds_df.columns.str.replace('American', '')
+            
+            # Drop rows with no Moneyline odds, breaks SQL
+            nba_team_odds_df = nba_team_odds_df[~nba_team_odds_df['oddsMoneyline'].isnull()]
 
             # Replace plus sign in moneyline with nothing, convert to int
             nba_team_odds_df['oddsMoneyline'] = nba_team_odds_df['oddsMoneyline'].str.replace(
