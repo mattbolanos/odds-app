@@ -1,0 +1,8 @@
+{
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+    "python.linting.pylintArgs": [
+        "--init-hook",
+        "import sys; from os.path import dirname, join, abspath; sys.path.insert(0, join(dirname(abspath(__file__)), '../'))"
+    ]
+}
