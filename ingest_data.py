@@ -4,31 +4,32 @@ This script ingests data from the DraftKings API and the NBA API
 and updates the SQL database.
 """
 # Load libraries
+import os
 import warnings
+from dotenv import load_dotenv
 import psycopg2
 import pandas as pd
-from functions.nba_api_functions import (
-    get_nba_api_player_game_logs,
-    get_nba_api_team_game_logs,
-    get_nba_games,
-    update_nba_api_data,
-)
-from functions.dk_api_functions import(
+
+# from functions.nba_api_functions import (
+#     get_nba_api_player_game_logs,
+#     get_nba_api_team_game_logs,
+#     get_nba_games,
+#     update_nba_api_data,
+# )
+from functions.dk_api_functions import (
     get_nba_team_game_lines,
     create_nba_team_odds_df,
     update_nba_team_odds,
 )
+
 warnings.filterwarnings("ignore")
+
+# Load environment variables
+load_dotenv()
 
 # Set up SQL connection
 # Connect to DB
-con = psycopg2.connect(
-    database="nba_odds",
-    user="postgres",
-    password="password",
-    host="127.0.0.1",
-    port="5432",
-)
+con = psycopg2.connect(os.environ["DATABASE_URL"])
 
 # Create cursor
 cursor = con.cursor()
@@ -73,15 +74,15 @@ update_nba_team_odds(cursor, nba_game_df, nba_team_odds_df)
 
 # NBA API
 # Get today's schedule
-nba_games_today = get_nba_games(nba_header_data)
+# nba_games_today = get_nba_games(nba_header_data)
 
-# get team game logs
-nba_api_team_game_logs = get_nba_api_team_game_logs(nba_header_data)
+# # get team game logs
+# nba_api_team_game_logs = get_nba_api_team_game_logs(nba_header_data)
 
-# get player game logs
-nba_api_player_game_logs = get_nba_api_player_game_logs(nba_header_data)
+# # get player game logs
+# nba_api_player_game_logs = get_nba_api_player_game_logs(nba_header_data)
 
-# Update Data
-update_nba_api_data(
-    cursor, nba_games_today, nba_api_team_game_logs, nba_api_player_game_logs
-)
+# # Update Data
+# update_nba_api_data(
+#     cursor, nba_games_today, nba_api_team_game_logs, nba_api_player_game_logs
+# )
