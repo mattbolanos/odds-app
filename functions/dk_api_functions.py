@@ -134,7 +134,7 @@ def create_nba_team_odds_df(nba_team_game_lines, event_ind):
             ]
         )[["oddsAmerican", "label", "line"]]
         spread_lines["oddType"] = "Spread"
-    except RuntimeError:
+    except: # pylint: disable=bare-except
         # Error -> return empty dataframe
         spread_lines = pd.DataFrame()
 
@@ -146,7 +146,7 @@ def create_nba_team_odds_df(nba_team_game_lines, event_ind):
             ]
         )[["oddsAmerican", "label"]]
         ml_lines["oddType"] = "Moneyline"
-    except RuntimeError:
+    except: # pylint: disable=bare-except
         # Error -> return empty dataframe
         ml_lines = pd.DataFrame()
 
@@ -158,7 +158,7 @@ def create_nba_team_odds_df(nba_team_game_lines, event_ind):
             ]
         )[["oddsAmerican", "label", "line"]]
         total_lines["oddType"] = "Total"
-    except IndexError:
+    except: # pylint: disable=bare-except
         # Error -> return empty dataframe
         total_lines = pd.DataFrame()
     ##
@@ -171,19 +171,21 @@ def create_nba_team_odds_df(nba_team_game_lines, event_ind):
         # Add event id to dataframe
         event_odds_df["eventId"] = event_df["eventId"][0]
 
-    except RuntimeError:
+    except: # pylint: disable=bare-except
         # Error -> return empty dataframe
         event_odds_df = pd.DataFrame()
 
     return event_odds_df
 
 
-def update_nba_team_odds(cursor, nba_game_df, nba_team_odds_df):
+def update_nba_team_odds(cursor, nba_game_df, nba_team_odds_df, con):
     """
     Function to join meta info to nba_team_odds_df + update SQL tables
     Args:
+    cursor (cursor): cursor to SQL database
     nba_game_df (df): nba_game_df from get_nba_team_game_lines()
     nba_team_odds_df (df): nba_team_odds_df from create_nba_team_odds_df()
+    con (connection): connection to SQL database
     """
     try:
         # Try to join meta info to nba_team_odds_df
@@ -292,6 +294,49 @@ def update_nba_team_odds(cursor, nba_game_df, nba_team_odds_df):
 
     try:
         # Try to update nba game df
+        # Query team_slug_lk to get correct team names
+        team_fix = pd.read_sql(
+            """
+            SELECT
+                dk_slug,
+                team_slug
+            FROM
+                team_slug_lk
+            WHERE
+                league_slug = 'NBA'
+            """,
+            con=con
+        )
+
+        # Join team_fix to nba_team_odds_df
+        # Replace away team names with correct names
+        nba_game_df = nba_game_df.merge(
+            team_fix,
+            left_on="awayTeamSlug",
+            right_on="dk_slug",
+            how="left",
+        )
+        # Replace awayTeamSlug with team_slug
+        nba_game_df["awayTeamSlug"].update(nba_game_df["team_slug"])
+
+        # Drop joined columns
+        nba_game_df.drop(
+            columns=["team_slug", "dk_slug"],
+            inplace=True,
+        )
+
+        # Replace home team names with correct names
+        nba_game_df = nba_game_df.merge(
+            team_fix,
+            left_on="homeTeamSlug",
+            right_on="dk_slug",
+            how="left",
+        )
+
+        # Replace homeTeamSlug with team_slug
+        nba_game_df["homeTeamSlug"].update(nba_game_df["team_slug"])
+
+
         if len(nba_game_df) > 0:
             for index, row in nba_game_df.iterrows():
                 # Query

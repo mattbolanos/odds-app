@@ -70,7 +70,7 @@ nba_team_odds_df = pd.concat(
 )
 
 # Update in SQL
-update_nba_team_odds(cursor, nba_game_df, nba_team_odds_df)
+update_nba_team_odds(cursor, nba_game_df, nba_team_odds_df, con)
 
 # NBA API
 # Get today's schedule

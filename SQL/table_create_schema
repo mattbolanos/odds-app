@@ -287,3 +287,11 @@
 --         poss = EXCLUDED.poss;
 -- END;
 -- $$;
+
+-- Name join table for DK and NBA API
+-- CREATE TABLE "team_slug_lk"(
+--     league_slug VARCHAR(5) NOT NULL,
+--     dk_slug VARCHAR(5) NOT NULL,
+--     team_slug VARCHAR(5) NOT NULL,
+--     CONSTRAINT PK_team_slug PRIMARY KEY (league_slug, dk_slug, team_slug)
+-- );
