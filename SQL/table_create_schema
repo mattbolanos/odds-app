@@ -295,3 +295,30 @@
 --     team_slug VARCHAR(5) NOT NULL,
 --     CONSTRAINT PK_team_slug PRIMARY KEY (league_slug, dk_slug, team_slug)
 -- );
+
+-- Create function to join dk_events and nba_api_events
+-- on date and team
+
+-- CREATE OR REPLACE FUNCTION join_dk_nbaapi_events (team_slug VARCHAR(5)) RETURNS TABLE (
+--         dk_event_id int,
+--         nba_game_id varchar(30),
+--         game_date date
+--     ) AS $$ 
+-- BEGIN RETURN QUERY
+-- SELECT 
+--     dk.eventid AS dk_event_id,
+--     nba.gameid AS nba_game_id,
+--     CAST(dk.startdate AS date) AS game_date
+-- FROM 
+--     dk_events dk
+-- INNER JOIN 
+--     nba_api_events nba 
+-- ON 
+--     CAST(dk.startdate AS date) = CAST(nba.gameet AS date)
+--     AND dk.hometeamslug = nba.hometeamslug
+-- WHERE 
+--     dk.hometeamslug = team_slug OR
+--     dk.awayteamslug = team_slug;
+
+-- END;
+-- $$ LANGUAGE 'plpgsql';
