@@ -336,7 +336,6 @@ def update_nba_team_odds(cursor, nba_game_df, nba_team_odds_df, con):
         # Replace homeTeamSlug with team_slug
         nba_game_df["homeTeamSlug"].update(nba_game_df["team_slug"])
 
-
         if len(nba_game_df) > 0:
             for index, row in nba_game_df.iterrows():
                 # Query
