@@ -60,17 +60,22 @@ nba_header_data = {
 # Game df and team game lines
 nba_team_game_lines, nba_game_df, offer_length = get_nba_team_game_lines()
 
-# Team Odds
-nba_team_odds_df = pd.concat(
-    [
-        create_nba_team_odds_df(nba_team_game_lines, game)
-        for game in range(offer_length)
-    ],
-    axis=0,
-)
+# If offer length is 0, then there are no games today
+if offer_length > 0:
 
-# Update in SQL
-update_nba_team_odds(cursor, nba_game_df, nba_team_odds_df, con)
+    # Team Odds
+    nba_team_odds_df = pd.concat(
+        [
+            create_nba_team_odds_df(nba_team_game_lines, game)
+            for game in range(offer_length)
+        ],
+        axis=0,
+    )
+
+    # Update in SQL
+    update_nba_team_odds(cursor, nba_game_df, nba_team_odds_df, con)
+else:
+    print("No games today")
 
 # NBA API
 # Get today's schedule

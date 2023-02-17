@@ -53,6 +53,10 @@ def get_nba_team_game_lines():
 
         # Only take games that have not started
         nba_game_df = nba_game_df[nba_game_df["gameState"] == "NOT_STARTED"]
+        
+        # if not @ in nameidentifier, return empty df
+        if not "@" in nba_game_df["nameIdentifier"].iloc[0]:
+            return pd.DataFrame(), pd.DataFrame(), 0
 
         # Create away column from first word of nameIdentifier, trim whitespace
         nba_game_df["awayTeamName"] = (
