@@ -6,7 +6,7 @@ and updates the SQL database.
 # Load libraries
 import os
 import warnings
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import psycopg2
 import pandas as pd
 
@@ -25,11 +25,15 @@ from functions.dk_api_functions import (
 warnings.filterwarnings("ignore")
 
 # Load environment variables
-load_dotenv()
+# load_dotenv()
 
 # Set up SQL connection
 # Connect to DB
-con = psycopg2.connect(os.environ["DATABASE_URL"])
+# con = psycopg2.connect(os.environ["DATABASE_URL"])
+con = psycopg2.connect(
+   database="nba_odds", user='postgres', password='password',
+   host='127.0.0.1', port= '5432'
+)
 
 # Create cursor
 cursor = con.cursor()
