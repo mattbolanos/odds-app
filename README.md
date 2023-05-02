@@ -1,5 +1,6 @@
-Code base for 
+WIP code base for 
 
 - Scraping DraftKings odds
-- Aggregating scraped odds
-- Website app infrastructure
+- Scraping NBA API player/team game logs
+- Comparing team odd beat % with player availibility
+
